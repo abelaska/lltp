@@ -1,0 +1,15 @@
+.project
+.classpath
+.settings/
+.springBeans
+.idea/
+META-INF/
+target/
+.~lock.*#
+~*
+.DS_Store
+docs/sql/dump/
+.vagrant
+lltp-server-example/journal*
+lltp-server-example/snapshot*
+.attach_pid*
