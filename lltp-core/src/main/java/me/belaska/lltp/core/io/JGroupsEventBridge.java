@@ -5,13 +5,13 @@ import me.belaska.lltp.core.LltpEventDispatcher;
 import me.belaska.lltp.core.translator.ReceiverTranslator;
 import org.jgroups.JChannel;
 import org.jgroups.Message;
-import org.jgroups.ReceiverAdapter;
+import org.jgroups.Receiver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.lmax.disruptor.EventPublisher;
 
-public class JGroupsEventBridge<D extends LltpEventDispatcher> extends ReceiverAdapter {
+public class JGroupsEventBridge<D extends LltpEventDispatcher> implements Receiver {
 
 	private static final Logger LOG = LoggerFactory.getLogger(JGroupsEventBridge.class);
 
@@ -41,7 +41,7 @@ public class JGroupsEventBridge<D extends LltpEventDispatcher> extends ReceiverA
 			LOG.trace("Received event: {}", msg);
 		}
 
-		ReceiverTranslator<D> receiverTranslator = ReceiverTranslator.eventBuffer(msg.getBuffer());
+		ReceiverTranslator<D> receiverTranslator = ReceiverTranslator.eventBuffer(msg.getArray());
 
 		receiverPublisher.publishEvent(receiverTranslator);
 	}

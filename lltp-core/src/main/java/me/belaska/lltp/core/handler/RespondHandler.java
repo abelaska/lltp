@@ -2,6 +2,7 @@ package me.belaska.lltp.core.handler;
 
 import me.belaska.lltp.core.LltpEventBuffer;
 import me.belaska.lltp.core.LltpEventDispatcher;
+import org.jgroups.BytesMessage;
 import org.jgroups.JChannel;
 import org.jgroups.Message;
 import org.slf4j.Logger;
@@ -33,10 +34,8 @@ public class RespondHandler<D extends LltpEventDispatcher> implements EventHandl
 		}
 
 		try {
-			// odeslani odpovedi
-			channel.send(new Message(null, null, event.getBuffer()));
+			channel.send(new BytesMessage(null, event.getBuffer()));
 		} finally {
-			// uvolneni alokovanych dat z event
 			event.clearBuffer();
 			event.clearEvent();
 		}

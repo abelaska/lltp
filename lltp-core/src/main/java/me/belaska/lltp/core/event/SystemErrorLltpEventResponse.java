@@ -7,7 +7,7 @@ import me.belaska.lltp.core.LltpEventDispatcher;
 import me.belaska.lltp.core.LltpEventResponse;
 import me.belaska.lltp.core.event.utils.ByteBufferHelper;
 
-public class SystemErrorLltpEventResponse extends AbstractLltpEventResponse<LltpEventDispatcher> {
+public class SystemErrorLltpEventResponse<D extends LltpEventDispatcher> extends AbstractLltpEventResponse<D> {
 
 	private volatile String value;
 
@@ -44,7 +44,7 @@ public class SystemErrorLltpEventResponse extends AbstractLltpEventResponse<Lltp
 	}
 
 	@Override
-	public LltpEventResponse<LltpEventDispatcher> process(LltpEventDispatcher dispatcher) {
+	public LltpEventResponse<D> process(D dispatcher) {
 		dispatcher.systemError(this);
 		return null;
 	}

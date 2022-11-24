@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import me.belaska.lltp.core.LltpEventBuffer;
 import me.belaska.lltp.core.LltpEventDispatcher;
 import me.belaska.lltp.core.translator.ReceiverTranslator;
+import org.jgroups.BytesMessage;
 import org.jgroups.JChannel;
 import org.jgroups.Message;
 import org.slf4j.Logger;
@@ -32,7 +33,7 @@ public class ReplicateHandler<D extends LltpEventDispatcher> extends AbstractClu
 	private EventPublisher<LltpEventBuffer<D>> receiverPublisher;
 
 	public void start(RingBuffer<LltpEventBuffer<D>> receiverRingBuffer) throws Exception {
-		this.receiverPublisher = new EventPublisher<LltpEventBuffer<D>>(receiverRingBuffer);
+		this.receiverPublisher = new EventPublisher<>(receiverRingBuffer);
 
 		this.joinCluster();
 	}
@@ -64,7 +65,7 @@ public class ReplicateHandler<D extends LltpEventDispatcher> extends AbstractClu
 			buffer.put(event.getBuffer());
 			buffer.flip();
 
-			channel.send(new Message(null, null, buffer.array(), 0, buffer.limit()));
+			channel.send(new BytesMessage(null, buffer));
 		}
 	}
 
@@ -75,7 +76,7 @@ public class ReplicateHandler<D extends LltpEventDispatcher> extends AbstractClu
 			LOG.trace("Received replica: {}", msg);
 		}
 
-		ByteBuffer b = ByteBuffer.wrap(msg.getBuffer());
+		ByteBuffer b = ByteBuffer.wrap(msg.getArray());
 		long messageId = b.getLong();
 
 		byte[] messageBuf = new byte[b.remaining()];

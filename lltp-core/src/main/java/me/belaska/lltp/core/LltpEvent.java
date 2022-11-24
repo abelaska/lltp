@@ -10,11 +10,6 @@ public interface LltpEvent<D extends LltpEventDispatcher> {
 
 	long getCorrelationId();
 
-	/**
-	 * Zpracovani udalosti.
-	 * 
-	 * @param dispatcher
-	 */
 	LltpEventResponse<D> process(D dispatcher);
 
 	void read(ByteBuffer byteBuffer);

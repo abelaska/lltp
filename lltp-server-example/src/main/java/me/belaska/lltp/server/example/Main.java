@@ -59,19 +59,19 @@ public class Main {
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws Exception {
 
-		eventTransformer = new BinaryEventTransformer<ExampleLltpEventDispatcher>(new ExampleLltpEventRegistryLltp());
+		eventTransformer = new BinaryEventTransformer<>(new ExampleLltpEventRegistryLltp());
 
-		journalHandler = new JournalHandler<ExampleLltpEventDispatcher>();
+		journalHandler = new JournalHandler<>();
 
 		responderExceptionHandler = new ResponderExceptionHandler();
 
-		encodeHandler = new MarshalHandler<ExampleLltpEventDispatcher>(eventTransformer);
+		encodeHandler = new MarshalHandler<>(eventTransformer);
 
-		respondHandler = new RespondHandler<ExampleLltpEventDispatcher>();
+		respondHandler = new RespondHandler<>();
 
-		lltpEventBufferFactory = new LltpEventBufferFactory<ExampleLltpEventDispatcher>();
+		lltpEventBufferFactory = new LltpEventBufferFactory<>();
 
-		Disruptor<LltpEventBuffer<ExampleLltpEventDispatcher>> responderDisruptor = new Disruptor<LltpEventBuffer<ExampleLltpEventDispatcher>>(
+		Disruptor<LltpEventBuffer<ExampleLltpEventDispatcher>> responderDisruptor = new Disruptor<>(
 				lltpEventBufferFactory, EXECUTOR, new SingleThreadedClaimStrategy(RESPONDER_RING_BUFFER_SIZE),
 				new SleepingWaitStrategy());
 		responderDisruptor.handleExceptionsWith(responderExceptionHandler);
@@ -80,16 +80,16 @@ public class Main {
 
 		//
 
-		replicateHandler = new ReplicateHandler<ExampleLltpEventDispatcher>();
+		replicateHandler = new ReplicateHandler<>();
 
-		receiverExceptionHandler = new ReceiverExceptionHandler<ExampleLltpEventDispatcher>(responderRingBuffer);
+		receiverExceptionHandler = new ReceiverExceptionHandler<>(responderRingBuffer);
 
-		decodeHandler = new UnmarshalHandler<ExampleLltpEventDispatcher>(eventTransformer);
+		decodeHandler = new UnmarshalHandler<>(eventTransformer);
 
 		eventDispatcher = new ExampleLltpEventDispatcherImpl();
-		eventHandler = new ProcessEventHandler<ExampleLltpEventDispatcher>(eventDispatcher, responderRingBuffer);
+		eventHandler = new ProcessEventHandler<>(eventDispatcher, responderRingBuffer);
 
-		Disruptor<LltpEventBuffer<ExampleLltpEventDispatcher>> receiverDisruptor = new Disruptor<LltpEventBuffer<ExampleLltpEventDispatcher>>(
+		Disruptor<LltpEventBuffer<ExampleLltpEventDispatcher>> receiverDisruptor = new Disruptor<>(
 				lltpEventBufferFactory, EXECUTOR, new SingleThreadedClaimStrategy(RECEIVER_RING_BUFFER_SIZE),
 				new SleepingWaitStrategy());
 		receiverDisruptor.handleExceptionsWith(receiverExceptionHandler);

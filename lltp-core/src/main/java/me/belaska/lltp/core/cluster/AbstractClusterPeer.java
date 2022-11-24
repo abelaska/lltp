@@ -1,12 +1,12 @@
 package me.belaska.lltp.core.cluster;
 
 import org.jgroups.JChannel;
-import org.jgroups.ReceiverAdapter;
+import org.jgroups.Receiver;
 import org.jgroups.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class AbstractClusterPeer extends ReceiverAdapter implements ClusterPeer {
+public abstract class AbstractClusterPeer implements Receiver, ClusterPeer {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractClusterPeer.class);
 

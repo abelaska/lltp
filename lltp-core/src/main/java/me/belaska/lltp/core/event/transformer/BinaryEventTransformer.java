@@ -13,7 +13,6 @@ import me.belaska.lltp.core.LltpEventTransformer;
  */
 public class BinaryEventTransformer<D extends LltpEventDispatcher> implements LltpEventTransformer<byte[], D> {
 
-	// TODO zadefinovat maximalni velikost serializovane zpravy
 	private final static int MAX_MESSAGE_SIZE = 65536;
 
 	private ByteBuffer buffer = ByteBuffer.allocate(MAX_MESSAGE_SIZE);
@@ -55,10 +54,9 @@ public class BinaryEventTransformer<D extends LltpEventDispatcher> implements Ll
 			throw new RuntimeException("Event id '" + eventId + "' not registered");
 		}
 
-		LltpEvent<D> obj = null;
-
+		LltpEvent<D> obj;
 		try {
-			obj = eventClass.newInstance();
+			obj = eventClass.getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to create new instance of class '" + eventClass + "'", e);
 		}

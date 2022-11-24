@@ -14,10 +14,10 @@
     </scm>
 
     <properties>
-        <slf4j-version>1.6.4</slf4j-version>
-        <logback-version>1.0.0</logback-version>
+        <slf4j-version>2.0.4</slf4j-version>
+        <logback-version>1.4.5</logback-version>
         <disruptor-version>2.8</disruptor-version>
-        <jgroup-version>3.1.0.Beta1</jgroup-version>
+        <jgroup-version>5.2.9.Final</jgroup-version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

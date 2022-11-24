@@ -18,7 +18,7 @@ public class SnapshotLltpEvent<D extends LltpEventDispatcher> extends AbstractLl
 	}
 
 	@Override
-	public LltpEventResponse<LltpEventDispatcher> process(LltpEventDispatcher dispatcher) {
+	public LltpEventResponse<D> process(D dispatcher) {
 		dispatcher.snapshot(this);
 		return null;
 	}

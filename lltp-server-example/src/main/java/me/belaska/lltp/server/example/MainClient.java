@@ -3,9 +3,10 @@ package me.belaska.lltp.server.example;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import org.jgroups.BytesMessage;
 import org.jgroups.JChannel;
 import org.jgroups.Message;
-import org.jgroups.ReceiverAdapter;
+import org.jgroups.Receiver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +42,7 @@ public class MainClient {
 	public static void send(LltpEvent<? extends LltpEventDispatcher> event) throws Exception {
 		long t0 = System.currentTimeMillis();
 		evtChannel
-				.send(new Message(null, null, eventTransformer.marshal((LltpEvent<ExampleLltpEventDispatcher>) event)));
+				.send(new BytesMessage(null, eventTransformer.marshal((LltpEvent<ExampleLltpEventDispatcher>) event)));
 		long t1 = System.currentTimeMillis();
 		LOG.info("Sent in {} msec(s), waiting...", (t1 - t0));
 	}
@@ -55,14 +56,14 @@ public class MainClient {
 		evtChannel.connect(eventClusterName);
 
 		MainClient.rspChannel = new JChannel(responseConfigFile);
-		rspChannel.setReceiver(new ReceiverAdapter() {
+		rspChannel.setReceiver(new Receiver() {
 			@Override
 			public void receive(Message msg) {
 
-				LltpEvent<?> ev = eventTransformer.unmarshal(msg.getBuffer());
+				LltpEvent<?> ev = eventTransformer.unmarshal(msg.getArray());
 
 				if (LOG.isTraceEnabled()) {
-					LOG.trace("Received length:{} event:'{}'", msg.getBuffer().length, ev);
+					LOG.trace("Received length:{} event:'{}'", msg.getLength(), ev);
 				}
 
 				latch.countDown();
@@ -82,7 +83,7 @@ public class MainClient {
 		send(new SnapshotLltpEvent());
 
 		LOG.info("Waiting...");
-		latch.await(5, TimeUnit.SECONDS);
+		latch.await(30, TimeUnit.SECONDS);
 
 		LOG.info("Done");
 

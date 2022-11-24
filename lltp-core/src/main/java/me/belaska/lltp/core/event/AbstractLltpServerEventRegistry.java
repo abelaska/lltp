@@ -9,13 +9,13 @@ import me.belaska.lltp.core.LltpEventRegistry;
 
 public abstract class AbstractLltpServerEventRegistry<D extends LltpEventDispatcher> implements LltpEventRegistry<D> {
 
-	private Map<Integer, Class<? extends LltpEvent<D>>> EVENT_ID_MAP = new HashMap<Integer, Class<? extends LltpEvent<D>>>();
-	private Map<Class<? extends LltpEvent<D>>, Integer> EVENT_CLASS_MAP = new HashMap<Class<? extends LltpEvent<D>>, Integer>();
+	private Map<Integer, Class<? extends LltpEvent<D>>> EVENT_ID_MAP = new HashMap<>();
+	private Map<Class<? extends LltpEvent<D>>, Integer> EVENT_CLASS_MAP = new HashMap<>();
 
 	@SuppressWarnings("unchecked")
 	public AbstractLltpServerEventRegistry() {
-		register(-1, (Class<? extends LltpEvent<D>>) SnapshotLltpEvent.class);
-		register(-2, (Class<? extends LltpEvent<D>>) SystemErrorLltpEventResponse.class);
+		register(-1, (Class<? extends LltpEvent<D>>) new SnapshotLltpEvent<D>().getClass());
+		register(-2, (Class<? extends LltpEvent<D>>) new SystemErrorLltpEventResponse<D>().getClass());
 	}
 
 	protected void register(int eventId, Class<? extends LltpEvent<D>> eventClass) {
